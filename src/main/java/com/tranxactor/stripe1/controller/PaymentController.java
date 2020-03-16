@@ -41,9 +41,9 @@ public class PaymentController {
 	public ResponseEntity<BaseMessage> chargeCard1(
 
 			@ApiParam(value = "Token value.") @Valid @RequestParam(value = "token", required = false) String token,
-			@ApiParam(value = "Amount Value.") @Valid @RequestParam(value = "amount", required = false) Double amount) {
+			@ApiParam(value = "Amount Value.") @Valid @RequestParam(value = "amount", required = false) Double amount) throws InvalidRequestException, Exception {
 		BaseMessage baseMessage = new BaseMessage();
-		try {
+		 
 			Charge charge=	stripeService.chargeNewCard(token, amount);
 			Date created = new Date(Long.parseLong(String.valueOf(charge.getCreated())) * 1000);		
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -65,14 +65,7 @@ public class PaymentController {
 			
 			
 			
-		} catch (InvalidRequestException e) {
-            logger.error(e.getMessage(), e);
-            throw new IllegalArgumentException(e);
-		} catch (Exception e) {
-	        logger.error(e.getMessage(), e);
-	        e.printStackTrace();
-            throw new IllegalArgumentException(e);
-		}
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(baseMessage);
 
 	}

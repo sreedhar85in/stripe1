@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.stripe.Stripe;
+import com.stripe.exception.InvalidRequestException;
 import com.stripe.model.Charge;
 import com.stripe.model.Token;
 
@@ -22,7 +23,7 @@ public class StripeService {
 		Stripe.apiKey = API_SECRET_KEY;
 	}
 
-	public Charge chargeNewCard(String token, double amount) throws Exception {
+	public Charge chargeNewCard(String token, double amount) throws InvalidRequestException, Exception {
 		Stripe.apiKey = API_SECRET_KEY;
 		Map<String, Object> card = new HashMap<>();
 		card.put("number", "4242424242424242");

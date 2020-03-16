@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.stripe.exception.InvalidRequestException;
+
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 	private Logger log = LoggerFactory.getLogger(getClass());
@@ -41,6 +43,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 	
 	@ExceptionHandler(value = { DataIntegrityViolationException.class })
 	public final ResponseEntity<Object> handleBadRequest(final DataIntegrityViolationException ex, final WebRequest request){
+		
+		return handleExceptionInternal(ex, message(HttpStatus.BAD_REQUEST, ex), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler(value= {InvalidRequestException.class})
+	public final ResponseEntity<Object> handleInvalidReuestexceptions(final InvalidRequestException ex, final WebRequest request){
+		
 		
 		return handleExceptionInternal(ex, message(HttpStatus.BAD_REQUEST, ex), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
